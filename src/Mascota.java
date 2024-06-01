@@ -104,6 +104,11 @@ public class Mascota {
 
     }
 
+    //Metodo para obtener la imagen de la mascota
+    public ImageIcon getMascotaAnimacion(){
+        return mascotaAnimacion;
+    }
+
     /*Metodos para incrementar los atributos.
     Basicamente reciben un valor el cual va a ser de 10 para todos.
     se calcula el valor actual de hambre + la cantidad de aumento.

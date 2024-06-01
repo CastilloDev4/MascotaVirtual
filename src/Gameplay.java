@@ -1,7 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class Gameplay {
 
@@ -13,12 +11,12 @@ public class Gameplay {
     private Mascota mascota;
     private JLabel fondoLabel;
     private JButton btnComer, btnBanar, btnEntrenar, btnDormir;
-    private JPanel panelBarras;
+    private JPanel panelInferior;
 
 
 
     public Gameplay(){
-
+            //this.fondoLabel = new JLabel();
             inicializarComponentes();
             configurarComponentes();
             configurarListeners();
@@ -52,16 +50,17 @@ public class Gameplay {
         btnDormir = new JButton("Dormir");
 
         //panel para almacenar las barras de progreso PERO NO SE SI IMPLEMENTARLO O NO!
-        panelBarras = new JPanel();
+        panelInferior = new JPanel();
+        panelInferior.setBackground(Color.WHITE);
 
 
 
 
         // Cargar el fondo desde el classpath
         ImageIcon Fondo = new ImageIcon(getClass().getClassLoader().getResource("mascotaBackground.jpg"));
+        Image FondoEscalado = Fondo.getImage().getScaledInstance(1000, 800, Image.SCALE_SMOOTH);
+        Fondo = new ImageIcon(FondoEscalado);
         fondoLabel = new JLabel(Fondo);
-
-
 
 
     }
@@ -79,7 +78,7 @@ public class Gameplay {
 
         // Añadir la mascota al fondo
         JLabel mascotaLabel = mascota.getMascotaLabel();
-        mascotaLabel.setBounds(50, 380, 300, 300);
+        mascotaLabel.setBounds(310, 360, 350, 350);
         fondoLabel.add(mascotaLabel);
 
 
@@ -90,60 +89,86 @@ public class Gameplay {
         progresoEnergia.setBounds(10, 160, 150, 30);
 
         //CONFIGURACION BOTONES
-        btnBanar.setBounds(10, 230, 80, 50);
         btnBanar.setBackground(Color.CYAN);
-        btnComer.setBounds(50, 230, 100, 50);
+        btnBanar.setPreferredSize(new Dimension(150, 100));
         btnComer.setBackground(Color.GREEN);
-        btnEntrenar.setBounds(100, 230, 100, 50);
+        btnComer.setPreferredSize(new Dimension(150, 100));
         btnEntrenar.setBackground(Color.YELLOW);
-        btnDormir.setBounds(150, 230, 100, 50);
+        btnEntrenar.setPreferredSize(new Dimension(150, 100));
         btnDormir.setBackground(Color.MAGENTA);
+        btnDormir.setPreferredSize(new Dimension(150, 100));
 
         //CONFIGURACION PANEL, COMENTADO PARA QUE NO APAREZCA IGUAL QUE LOS BOTONES
+        int panelHeight = 200;//Altura del panel
+        panelInferior.setBounds(0, 670, 1000, 100);
+        panelInferior.setLayout(new GridLayout(1,4));
+        panelInferior.setBackground(new Color(0xA7A7A7));
+        panelInferior.setPreferredSize(new Dimension(gameplayFrame.getWidth(), panelHeight));
 
-        panelBarras.setBounds(0, 0, 300, 320);
-        panelBarras.setLayout(null);
-        panelBarras.setBackground(Color.WHITE);
-        //fondoLabel.add(panelBarras);
+        //Agregar panel al fondo
+        fondoLabel.add(panelInferior);
+
+        //Agregar barras de progreso al fondo
         fondoLabel.add(progresoHambre);
         fondoLabel.add(progresoFelicidad);
         fondoLabel.add(progresoSuciedad);
         fondoLabel.add(progresoEnergia);
-        /*panelBarras.add(btnBanar);
-        panelBarras.add(btnComer);
-        panelBarras.add(btnEntrenar);
-        panelBarras.add(btnDormir);*/
+        fondoLabel.setBounds(0, 0, gameplayFrame.getWidth(), gameplayFrame.getHeight() - panelHeight);
 
-
-
+        //Agregrar botones
+        panelInferior.add(btnBanar);
+        panelInferior.add(btnComer);
+        panelInferior.add(btnEntrenar);
+        panelInferior.add(btnDormir);
 
     }
 
-
-    public void mostrarFrame(){
+     ///METODO PARA MOSTRAR EL FRAME
+     public void mostrarFrame(){
         gameplayFrame.setVisible(true);
     }
 
-
-        // METODO PARA ACTUALIZAR LAS BARRAS CADA VEZ QUE SE OPRIMA UN BOTON, PARA DARLES EL NUEVO VALOR
-    private void actualizarBarras() {
+    // METODO PARA ACTUALIZAR LAS BARRAS CADA VEZ QUE SE OPRIMA UN BOTON, PARA DARLES EL NUEVO VALOR
+    public void actualizarBarras() {
         progresoHambre.setValue(mascota.getHambre());
         progresoFelicidad.setValue(mascota.getFelicidad());
         progresoSuciedad.setValue(mascota.getSuciedad());
         progresoEnergia.setValue(mascota.getEnergia());
     }
 
-    public void configurarListeners(){
+    public void configurarListeners()
+     {
+         // Configurar listeners para los botones
+         btnBanar.addActionListener(e -> {
+             new Thread(new HiloBanar(mascota,this)).start();//HiloBanar funciona como un hilo que se encarga de banar a la mascota
+             //actualizarBarras();
+         });
+
+         btnComer.addActionListener(e -> {
+             new Thread(new HiloComer(mascota)).start();//HiloComer funciona como un hilo que se encarga de alimentar a la mascota
+             actualizarBarras();
+         });
+
+         btnEntrenar.addActionListener(e -> {
+             new Thread(new HiloEntrenar(mascota)).start();//HiloEntrenar funciona como un hilo que se encarga de entrenar a la mascota
+             actualizarBarras();
+         });
+
+         btnDormir.addActionListener(e -> {
+             new Thread(new HiloDormir(mascota)).start();//HiloDormir funciona como un hilo que se encarga de dormir a la mascota
+             actualizarBarras();
+         });
+     }
 
 
-        }
+     }
 
 
 
 
 
 
-    }
+
 
 
 
