@@ -1,10 +1,10 @@
 public class HiloBanar implements Runnable {
     private Mascota mascota;
-    Gameplay gameplay;
 
-    public HiloBanar(Mascota mascota, Gameplay gameplay) {
+
+    public HiloBanar(Mascota mascota ) {
         this.mascota = mascota;
-        this.gameplay = gameplay;
+
     }
 
     @Override
@@ -16,6 +16,6 @@ public class HiloBanar implements Runnable {
             e.printStackTrace();
         }
         mascota.getMascotaLabel().setIcon(mascota.getMascotaAnimacion());
-        gameplay.actualizarBarras();
+        //gameplay.actualizarBarras();
     }
 }

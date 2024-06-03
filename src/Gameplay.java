@@ -1,5 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyListener;
 
 public class Gameplay {
 
@@ -12,7 +15,7 @@ public class Gameplay {
     private JLabel fondoLabel;
     private JButton btnComer, btnBanar, btnEntrenar, btnDormir;
     private JPanel panelInferior;
-
+    private Timer timer;
 
 
     public Gameplay(){
@@ -21,6 +24,7 @@ public class Gameplay {
             configurarComponentes();
             configurarListeners();
             mostrarFrame();
+            iniciarTimer();
 
     }
 
@@ -56,16 +60,24 @@ public class Gameplay {
 
 
 
+
+
         // Cargar el fondo desde el classpath
         ImageIcon Fondo = new ImageIcon(getClass().getClassLoader().getResource("mascotaBackground.jpg"));
         Image FondoEscalado = Fondo.getImage().getScaledInstance(1000, 800, Image.SCALE_SMOOTH);
         Fondo = new ImageIcon(FondoEscalado);
         fondoLabel = new JLabel(Fondo);
 
+        // Añadir el KeyListener
+        Movimiento movimiento = new Movimiento(mascota);
+        gameplayFrame.addKeyListener(movimiento);
+        gameplayFrame.setFocusable(true); // Asegurarse de que el frame sea focusable
+        gameplayFrame.requestFocusInWindow(); // Solicitar el foco
+
 
     }
 
-    public void configurarComponentes(){
+    public void configurarComponentes() {
 
         gameplayFrame.setSize(1000, 800);
         gameplayFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -83,10 +95,15 @@ public class Gameplay {
 
 
         // Añadir barras de progreso al frame
-        progresoHambre.setBounds(10, 10, 150, 30);
-        progresoFelicidad.setBounds(10, 60, 150, 30);
-        progresoSuciedad.setBounds(10, 110, 150, 30);
+        progresoHambre.setBounds(10, 60, 150, 30);
+        progresoFelicidad.setBounds(10, 110, 150, 30);
+        progresoSuciedad.setBounds(10, 10, 150, 30);
         progresoEnergia.setBounds(10, 160, 150, 30);
+        progresoHambre.setForeground(Color.GREEN);
+        progresoFelicidad.setForeground(Color.YELLOW);
+        progresoSuciedad.setForeground(Color.CYAN);
+        progresoEnergia.setForeground(Color.MAGENTA);
+
 
         //CONFIGURACION BOTONES
         btnBanar.setBackground(Color.CYAN);
@@ -129,7 +146,7 @@ public class Gameplay {
     }
 
     // METODO PARA ACTUALIZAR LAS BARRAS CADA VEZ QUE SE OPRIMA UN BOTON, PARA DARLES EL NUEVO VALOR
-    public void actualizarBarras() {
+    public  void actualizarBarras() {
         progresoHambre.setValue(mascota.getHambre());
         progresoFelicidad.setValue(mascota.getFelicidad());
         progresoSuciedad.setValue(mascota.getSuciedad());
@@ -140,25 +157,35 @@ public class Gameplay {
      {
          // Configurar listeners para los botones
          btnBanar.addActionListener(e -> {
-             new Thread(new HiloBanar(mascota,this)).start();//HiloBanar funciona como un hilo que se encarga de banar a la mascota
-             //actualizarBarras();
+              new Thread(new HiloBanar(mascota)).start();
          });
 
          btnComer.addActionListener(e -> {
              new Thread(new HiloComer(mascota)).start();//HiloComer funciona como un hilo que se encarga de alimentar a la mascota
-             actualizarBarras();
+            // actualizarBarras();
          });
 
          btnEntrenar.addActionListener(e -> {
              new Thread(new HiloEntrenar(mascota)).start();//HiloEntrenar funciona como un hilo que se encarga de entrenar a la mascota
-             actualizarBarras();
+             //actualizarBarras();
          });
 
          btnDormir.addActionListener(e -> {
              new Thread(new HiloDormir(mascota)).start();//HiloDormir funciona como un hilo que se encarga de dormir a la mascota
-             actualizarBarras();
+             //actualizarBarras();
          });
+
+
      }
+    public void iniciarTimer() {
+        timer = new Timer(500, e -> {
+            mascota.decrementarAtributos(1);
+            actualizarBarras();
+        });
+        timer.start();
+    }
+
+
 
 
      }

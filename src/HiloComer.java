@@ -1,8 +1,13 @@
+import javax.swing.*;
+
 public class HiloComer implements Runnable {
     private Mascota mascota;
 
+
     public HiloComer(Mascota mascota) {
+
         this.mascota = mascota;
+
     }
 
     @Override
@@ -13,6 +18,8 @@ public class HiloComer implements Runnable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        mascota.getMascotaLabel().setIcon(mascota.getMascotaAnimacion());
+            mascota.getMascotaLabel().setIcon(mascota.getMascotaAnimacion());
+            //gameplay.actualizarBarras();
+        ;
     }
 }

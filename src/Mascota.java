@@ -14,6 +14,9 @@ public class Mascota {
     private ImageIcon dormirAnimacion;
     private ImageIcon banarAnimacion;
     private ImageIcon entrenarAnimacion;
+    private ImageIcon correrAnimacion;
+
+    private ImageIcon saltarAnimacion;
 
 
     public Mascota(int hambre, int felicidad, int suciedad, int energia){
@@ -73,7 +76,9 @@ public class Mascota {
         //suciedadAnimacion = new ImageIcon(getClass().getClassLoader().getResource("suciedad.gif"));
         //energiaAnimacion = new ImageIcon(getClass().getClassLoader().getResource("energia.gif"));
        dormirAnimacion = new ImageIcon(getClass().getClassLoader().getResource("dormir.gif"));
-        mascotaLabel = new JLabel(mascotaAnimacion);
+       correrAnimacion = new ImageIcon(getClass().getClassLoader().getResource("correr.gif"));
+       saltarAnimacion = new ImageIcon(getClass().getClassLoader().getResource("saltar.gif"));
+       mascotaLabel = new JLabel(mascotaAnimacion);
     }
 
     //Metodo para comer, setea la imagen de mascotaLabel e incrementa el nivel de hambre
@@ -109,6 +114,11 @@ public class Mascota {
         return mascotaAnimacion;
     }
 
+
+    public ImageIcon getCorrerAnimacion() {return correrAnimacion;}
+
+    public ImageIcon getSaltarAnimacion() {return saltarAnimacion;}
+
     /*Metodos para incrementar los atributos.
     Basicamente reciben un valor el cual va a ser de 10 para todos.
     se calcula el valor actual de hambre + la cantidad de aumento.
@@ -128,6 +138,14 @@ public class Mascota {
     private void incrementarEnergia(int cantidad) {
         energia = Math.min(energia + cantidad, 100);
     }
+
+    public void decrementarAtributos(int decremento){
+        hambre = Math.max(hambre - decremento, 0);
+        felicidad = Math.max(felicidad - decremento, 0);
+        suciedad = Math.max(suciedad - decremento, 0);
+        energia = Math.max(energia - decremento, 0);
+    }
+
 
 
 
