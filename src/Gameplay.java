@@ -75,6 +75,11 @@ public class Gameplay {
         gameplayFrame.requestFocusInWindow(); // Solicitar el foco
 
 
+
+
+
+
+
     }
 
     public void configurarComponentes() {
@@ -82,7 +87,7 @@ public class Gameplay {
         gameplayFrame.setSize(1000, 800);
         gameplayFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameplayFrame.setLocationRelativeTo(null);
-        // gameplayFrame.setUndecorated(true);
+       // gameplayFrame.setUndecorated(true);
 
         gameplayFrame.setContentPane(fondoLabel);
 

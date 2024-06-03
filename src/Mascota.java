@@ -17,6 +17,7 @@ public class Mascota {
     private ImageIcon correrAnimacion;
 
     private ImageIcon saltarAnimacion;
+    private ImageIcon correrInvertidoAnimacion;
 
 
     public Mascota(int hambre, int felicidad, int suciedad, int energia){
@@ -79,6 +80,7 @@ public class Mascota {
        correrAnimacion = new ImageIcon(getClass().getClassLoader().getResource("correr.gif"));
        saltarAnimacion = new ImageIcon(getClass().getClassLoader().getResource("saltar.gif"));
        mascotaLabel = new JLabel(mascotaAnimacion);
+       correrInvertidoAnimacion = new ImageIcon(getClass().getClassLoader().getResource("correrInvertido.gif"));
     }
 
     //Metodo para comer, setea la imagen de mascotaLabel e incrementa el nivel de hambre
@@ -118,6 +120,8 @@ public class Mascota {
     public ImageIcon getCorrerAnimacion() {return correrAnimacion;}
 
     public ImageIcon getSaltarAnimacion() {return saltarAnimacion;}
+
+    public ImageIcon getCorrerInvertidoAnimacion() {return correrInvertidoAnimacion;}
 
     /*Metodos para incrementar los atributos.
     Basicamente reciben un valor el cual va a ser de 10 para todos.
