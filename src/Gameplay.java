@@ -16,6 +16,7 @@ public class Gameplay {
     private JButton btnComer, btnBanar, btnEntrenar, btnDormir;
     private JPanel panelInferior;
     private Timer timer;
+    private JLabel nivelLabel;
 
 
     public Gameplay(){
@@ -33,7 +34,7 @@ public class Gameplay {
 
         gameplayFrame = new JFrame("Virtual Pet");
         //Inicializacion de la mascota con sus valores en 100
-        mascota = new Mascota(100, 100, 100, 100);
+        mascota = new Mascota(100, 100, 50, 100, 0);
         //Inicializar barras de progreso
         progresoHambre = new JProgressBar(0, 100);
         progresoFelicidad = new JProgressBar(0, 100);
@@ -48,7 +49,7 @@ public class Gameplay {
 
         //inicializacion de los botones
 
-        btnBanar = new JButton("Banar");
+        btnBanar = new JButton("Bañar");
         btnComer = new JButton("Comer");
         btnEntrenar = new JButton("Entrenar");
         btnDormir = new JButton("Dormir");
@@ -56,11 +57,6 @@ public class Gameplay {
         //panel para almacenar las barras de progreso PERO NO SE SI IMPLEMENTARLO O NO!
         panelInferior = new JPanel();
         panelInferior.setBackground(Color.WHITE);
-
-
-
-
-
 
         // Cargar el fondo desde el classpath
         ImageIcon Fondo = new ImageIcon(getClass().getClassLoader().getResource("mascotaBackground.jpg"));
@@ -74,11 +70,10 @@ public class Gameplay {
         gameplayFrame.setFocusable(true); // Asegurarse de que el frame sea focusable
         gameplayFrame.requestFocusInWindow(); // Solicitar el foco
 
-
-
-
-
-
+        nivelLabel = new JLabel("Nivel: " + mascota.getNivel());
+        nivelLabel.setFont(new Font("Arial", Font.BOLD, 40));
+        nivelLabel.setForeground(Color.WHITE);
+        fondoLabel.add(nivelLabel);
 
     }
 
@@ -97,6 +92,10 @@ public class Gameplay {
         JLabel mascotaLabel = mascota.getMascotaLabel();
         mascotaLabel.setBounds(310, 360, 350, 350);
         fondoLabel.add(mascotaLabel);
+
+        //Label nivel
+        nivelLabel.setSize(200, 60);
+        nivelLabel.setLocation(gameplayFrame.getWidth() - nivelLabel.getWidth() - 10, 10);
 
 
         // Añadir barras de progreso al frame
@@ -183,9 +182,15 @@ public class Gameplay {
 
      }
     public void iniciarTimer() {
-        timer = new Timer(500, e -> {
+        timer = new Timer(1000, e -> {
             mascota.decrementarAtributos(1);
+            //mascota.setSuciedad(mascota.getSuciedad()+1);//Incrementa la suciedad de la mascota
             actualizarBarras();
+            //Validacion para subir de nivel
+            if (mascota.getHambre() >= 50 && mascota.getFelicidad() >= 50 && mascota.getSuciedad() > 50 && mascota.getEnergia() >= 50) {
+                mascota.setNivel(mascota.getNivel() + 1);
+                nivelLabel.setText("Nivel: " + mascota.getNivel());
+            }
         });
         timer.start();
     }

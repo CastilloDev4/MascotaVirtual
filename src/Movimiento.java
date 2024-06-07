@@ -52,6 +52,10 @@ public class Movimiento implements KeyListener {
         if (e.getKeyChar() == 'd' || e.getKeyChar() == 'D' || e.getExtendedKeyCode() == KeyEvent.VK_RIGHT) {
             mascota.getMascotaLabel().setIcon(animacionInicial);
         }
+
+        if (e.getKeyChar() != 'a' && e.getKeyChar() != 'A' && e.getKeyChar() != 'd' && e.getKeyChar() != 'D' && e.getExtendedKeyCode() != KeyEvent.VK_LEFT && e.getExtendedKeyCode() != KeyEvent.VK_RIGHT) {
+            mascota.getMascotaLabel().setIcon(animacionInicial);
+        }
     }
 
     private void saltar() {

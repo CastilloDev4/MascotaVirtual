@@ -15,16 +15,17 @@ public class Mascota {
     private ImageIcon banarAnimacion;
     private ImageIcon entrenarAnimacion;
     private ImageIcon correrAnimacion;
-
     private ImageIcon saltarAnimacion;
     private ImageIcon correrInvertidoAnimacion;
+    private  int Nivel;
 
 
-    public Mascota(int hambre, int felicidad, int suciedad, int energia){
+    public Mascota(int hambre, int felicidad, int suciedad, int energia, int nivel){
         this.hambre = hambre;
         this.felicidad = felicidad;
         this.suciedad = suciedad;
         this.energia = energia;
+        this.Nivel = nivel;
 
 
         CargarAnimaciones();
@@ -62,9 +63,17 @@ public class Mascota {
         this.energia = energia;
     }
 
+    public int getNivel() {
+        return Nivel;
+    }
+    public void setNivel(int nivel) {
+        this.Nivel = nivel;
+    }
+
     public JLabel getMascotaLabel() {
         return mascotaLabel;
     }
+
 
 
     //METODO PARA CARGAR LAS ANIMACIONES DE LA MASCOTA. Hay que ingresar mas supongo
@@ -101,6 +110,7 @@ public class Mascota {
     public void banar(){
         mascotaLabel.setIcon(banarAnimacion);
         incrementarLimpieza(10);
+        //suciedad = Math.max(suciedad - 10, 0);
 
     }
 
