@@ -17,15 +17,16 @@ public class Mascota {
     private ImageIcon correrAnimacion;
     private ImageIcon saltarAnimacion;
     private ImageIcon correrInvertidoAnimacion;
-    private  int Nivel;
+    private  int nivel;
+    private boolean nivelSubido;
 
 
-    public Mascota(int hambre, int felicidad, int suciedad, int energia, int nivel){
+    public Mascota(int hambre, int felicidad, int suciedad, int energia){
         this.hambre = hambre;
         this.felicidad = felicidad;
         this.suciedad = suciedad;
         this.energia = energia;
-        this.Nivel = nivel;
+        this.nivel = nivel = 1;
 
 
         CargarAnimaciones();
@@ -64,11 +65,22 @@ public class Mascota {
     }
 
     public int getNivel() {
-        return Nivel;
+        return nivel;
     }
-    public void setNivel(int nivel) {
-        this.Nivel = nivel;
+
+    public void subirNivel() {
+        this.nivel++;
+        this.nivelSubido = true;
     }
+
+    public void reiniciarNivelSubido() {
+        this.nivelSubido = false;
+    }
+
+    public boolean isNivelSubido() {
+        return nivelSubido;
+    }
+
 
     public JLabel getMascotaLabel() {
         return mascotaLabel;
