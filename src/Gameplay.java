@@ -3,9 +3,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
+import java.io.Serializable;
 
-public class Gameplay {
-
+public class Gameplay implements Serializable {
+    private AutoGuardado autoGuardado;
+    private Sound sound;
     private JFrame gameplayFrame;
     private JProgressBar progresoHambre;
     private JProgressBar progresoFelicidad;
@@ -16,22 +18,28 @@ public class Gameplay {
     private JButton btnComer, btnBanar, btnEntrenar, btnDormir;
     private JPanel panelInferior;
     private Timer timer;
+    private Timer timer1, timer2, timer3;
     private JLabel nivelLabel;
 
 
-
-    public Gameplay(){
+//<<<<<<< Updated upstream
+//=======
+    public Gameplay() {
         //this.fondoLabel = new JLabel();
+
         inicializarComponentes();
         configurarComponentes();
         configurarListeners();
+        cargarEstados(); //👻👻👻👻👻
         mostrarFrame();
         iniciarTimer();
+        configurarSonido("src/Sounds/Clear-Skies.wav"); //👻👻👻👻👻
+        iniciarTimerAutoguardado(); //👻👻👻👻👻
+
     }
 
 
     public void inicializarComponentes(){
-
         gameplayFrame = new JFrame("Virtual Pet");
         //Inicializacion de la mascota con sus valores en 100
         mascota = new Mascota(50, 50, 50, 50);
@@ -184,6 +192,7 @@ public class Gameplay {
     }
 
     public void configurarListeners()
+//<<<<<<< Updated upstream
     {
         btnBanar.addActionListener(e -> {
             new Thread(() -> {
@@ -191,6 +200,8 @@ public class Gameplay {
                 SwingUtilities.invokeLater(this::actualizarBarras);
                 SwingUtilities.invokeLater(() -> gameplayFrame.requestFocusInWindow());
             }).start();
+            configurarSonidoAcciones("src/Sounds/bañar.wav");
+
         });
 
         btnComer.addActionListener(e -> {
@@ -199,6 +210,8 @@ public class Gameplay {
                 SwingUtilities.invokeLater(this::actualizarBarras);
                 SwingUtilities.invokeLater(() -> gameplayFrame.requestFocusInWindow());
             }).start();
+            configurarSonidoAcciones("src/Sounds/comer.wav");
+
         });
 
         btnEntrenar.addActionListener(e -> {
@@ -207,6 +220,8 @@ public class Gameplay {
                 SwingUtilities.invokeLater(this::actualizarBarras);
                 SwingUtilities.invokeLater(() -> gameplayFrame.requestFocusInWindow());
             }).start();
+            configurarSonidoAcciones("src/Sounds/entrenar.wav");
+
         });
 
         btnDormir.addActionListener(e -> {
@@ -215,20 +230,76 @@ public class Gameplay {
                 SwingUtilities.invokeLater(this::actualizarBarras);
                 SwingUtilities.invokeLater(() -> gameplayFrame.requestFocusInWindow());
             }).start();
+            configurarSonidoAcciones("src/Sounds/dormir.wav");
+
         });
 
+//
+//        // Configurar listeners para los botones
+//        btnBanar.addActionListener(e -> {
+//            new Thread(new HiloBanar(mascota)).start();
+//
+//        });
+//
+//        btnComer.addActionListener(e -> {
+//            new Thread(new HiloComer(mascota)).start();//HiloComer funciona como un hilo que se encarga de alimentar a la mascota
+//            // actualizarBarras();
+//
+//        });
+//
+//        btnEntrenar.addActionListener(e -> {
+//            new Thread(new HiloEntrenar(mascota)).start();//HiloEntrenar funciona como un hilo que se encarga de entrenar a la mascota
+//            //actualizarBarras();
+//        });
+//
+//        btnDormir.addActionListener(e -> {
+//            new Thread(new HiloDormir(mascota)).start();//HiloDormir funciona como un hilo que se encarga de dormir a la mascota
+//            //actualizarBarras();
+//
+//        });
     }
-
     //TIMER QUE SE ENCARGA DE DECREMENTAR LAS BARRAS DE PROGRESO
     public void iniciarTimer() {
         timer = new Timer(500, e -> {
+            // Crea un Timer que se dispara cada 1000 milisegundos (1 segundo)
             mascota.decrementarAtributos(1);
             actualizarBarras();
         });
         timer.start();
     }
 
+    public void configurarSonido(String ruta) { //👻👻👻👻👻
+        sound = new Sound();
+        sound.cargarSonido(ruta);
+        sound.iniciarReproduccionEnHilo();
+    }
+    public void configurarSonidoAcciones(String ruta){ //👻👻👻👻👻
+        sound = new Sound();
+        sound.detener();
+        sound.cargarSonido(ruta);
+        sound.reproducir();
+    }
+    private void iniciarTimerAutoguardado() { //👻👻👻👻👻
+        autoGuardado = new AutoGuardado();
+        timer1 = new Timer(10000, e -> autoGuardado.guardarDatos(mascota.getHambre(), mascota.getFelicidad(), mascota.getEnergia(), mascota.getSuciedad(), mascota.getNivel()));
+        new AutoGuardado();
+        timer1.start();
+        timer2 = new Timer(10000, e -> autoGuardado.imprimirLista());
+        timer2.start();
+        timer3 = new Timer(10000, e -> autoGuardado.guardarEstado());
+        timer3.start();
+   }
 
-
-
+   public void cargarEstados(){ //👻👻👻👻👻
+        autoGuardado = new AutoGuardado();
+        autoGuardado.cargarLista();
+        autoGuardado.actualizarDatos();
+   }
 }
+
+
+
+
+
+
+
