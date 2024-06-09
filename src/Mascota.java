@@ -8,9 +8,6 @@ public class Mascota {
     private JLabel mascotaLabel;
     private ImageIcon mascotaAnimacion;
     private ImageIcon hambreAnimacion;
-    private ImageIcon felicidadAnimacion;
-    private ImageIcon suciedadAnimacion;
-    private ImageIcon energiaAnimacion;
     private ImageIcon dormirAnimacion;
     private ImageIcon banarAnimacion;
     private ImageIcon entrenarAnimacion;
@@ -26,7 +23,8 @@ public class Mascota {
         this.felicidad = felicidad;
         this.suciedad = suciedad;
         this.energia = energia;
-        this.nivel = nivel = 1;
+        this.nivel = 1;
+
 
 
         CargarAnimaciones();
@@ -68,6 +66,10 @@ public class Mascota {
         return nivel;
     }
 
+    public void setNivel(int nivel) {
+        this.nivel = nivel;
+    }
+
     public void subirNivel() {
         this.nivel++;
         this.nivelSubido = true;
@@ -81,27 +83,24 @@ public class Mascota {
         return nivelSubido;
     }
 
-
     public JLabel getMascotaLabel() {
         return mascotaLabel;
     }
 
 
 
-    //METODO PARA CARGAR LAS ANIMACIONES DE LA MASCOTA. Hay que ingresar mas supongo
+    //METODO PARA CARGAR LAS ANIMACIONES DE LA MASCOTA. Hay que ingresar mas supongo, supones muy bien
     public void CargarAnimaciones(){
        mascotaAnimacion = new ImageIcon(getClass().getClassLoader().getResource("mascota.gif"));
         hambreAnimacion = new ImageIcon(getClass().getClassLoader().getResource("hambre.gif"));
         entrenarAnimacion = new ImageIcon(getClass().getClassLoader().getResource("entrenar.gif"));
         banarAnimacion = new ImageIcon(getClass().getClassLoader().getResource("banar.gif"));
-        //felicidadAnimacion = new ImageIcon(getClass().getClassLoader().getResource("felicidad.gif"));
-        //suciedadAnimacion = new ImageIcon(getClass().getClassLoader().getResource("suciedad.gif"));
-        //energiaAnimacion = new ImageIcon(getClass().getClassLoader().getResource("energia.gif"));
        dormirAnimacion = new ImageIcon(getClass().getClassLoader().getResource("dormir.gif"));
        correrAnimacion = new ImageIcon(getClass().getClassLoader().getResource("correr.gif"));
        saltarAnimacion = new ImageIcon(getClass().getClassLoader().getResource("saltar.gif"));
        mascotaLabel = new JLabel(mascotaAnimacion);
        correrInvertidoAnimacion = new ImageIcon(getClass().getClassLoader().getResource("correrInvertido.gif"));
+
     }
 
     //Metodo para comer, setea la imagen de mascotaLabel e incrementa el nivel de hambre
@@ -171,12 +170,4 @@ public class Mascota {
         suciedad = Math.max(suciedad - decremento, 0);
         energia = Math.max(energia - decremento, 0);
     }
-
-
-
-
-
-
-
-
 }

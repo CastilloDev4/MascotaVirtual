@@ -7,7 +7,9 @@ public class Inicio {
     public static JFrame inicioFrame;
     private JLabel fondoLabel;
     private JLabel bienvenido;
-    private JButton btnJugar, btnSalir;
+    private JButton btnJugar1,btnJugar2, btnSalir;
+    private Mascota mascota;
+    private MascotaReaper reaperMascota;
 
 
     public Inicio() {
@@ -29,7 +31,8 @@ public class Inicio {
         fondoLabel = new JLabel(gifFondo);
 
         bienvenido = new JLabel("BIENVENIDO A VIRTUAL PET");
-        btnJugar = new JButton("JUGAR");
+        btnJugar1 = new JButton("DogChaw");
+        btnJugar2 = new JButton("Fantasmin");
         btnSalir = new JButton("SALIR");
 
 
@@ -50,10 +53,13 @@ public class Inicio {
         bienvenido.setForeground(Color.BLACK);
         fondoLabel.add(bienvenido);
 
-        btnJugar.setBounds(230, 300, 100, 50);
-        btnJugar.setBackground(Color.GREEN);
-        fondoLabel.add(btnJugar);
-        btnSalir.setBounds(230, 360, 100, 50);
+        btnJugar1.setBounds(160, 300, 100, 50);
+        btnJugar1.setBackground(Color.GREEN);
+        btnJugar2.setBounds(320, 300, 100, 50);
+        btnJugar2.setBackground(Color.GREEN);
+        fondoLabel.add(btnJugar1);
+        fondoLabel.add(btnJugar2);
+        btnSalir.setBounds(230, 400, 100, 50);
         btnSalir.setBackground(Color.RED);
         fondoLabel.add(btnSalir);
 
@@ -67,14 +73,30 @@ public class Inicio {
             }
         });
 
-        btnJugar.addActionListener(new ActionListener() {
+        btnJugar1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                inicioFrame.dispose();
-                Gameplay gameplay = new Gameplay();
+                mascota = new Mascota(100, 100, 50, 100);
+                mascota.CargarAnimaciones();
+                Gameplay gameplay = new Gameplay(mascota);
                 gameplay.mostrarFrame();
+                inicioFrame.dispose();
             }
         });
+
+        btnJugar2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                reaperMascota = new MascotaReaper(100, 100, 50, 100);
+                reaperMascota.CargarAnimaciones();
+                
+                GameplayReaper gameplayReaper = new GameplayReaper(reaperMascota);
+
+                inicioFrame.dispose();
+            }
+        });
+
+
 
 
     }

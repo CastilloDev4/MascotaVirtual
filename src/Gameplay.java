@@ -20,13 +20,13 @@ public class Gameplay {
 
 
 
-    public Gameplay(){
-        //this.fondoLabel = new JLabel();
-        inicializarComponentes();
-        configurarComponentes();
-        configurarListeners();
-        mostrarFrame();
-        iniciarTimer();
+    public Gameplay(Mascota mascota){
+            this.mascota = mascota;
+            inicializarComponentes();
+            configurarComponentes();
+            configurarListeners();
+            mostrarFrame();
+            iniciarTimer();
 
     }
 
@@ -36,6 +36,7 @@ public class Gameplay {
         gameplayFrame = new JFrame("Virtual Pet");
         //Inicializacion de la mascota con sus valores en 100
         mascota = new Mascota(50, 50, 50, 50);
+        //reaperMascota = new MascotaReaper(100, 100, 50, 100, 0);
         //Inicializar barras de progreso
         progresoHambre = new JProgressBar(0, 100);
         progresoFelicidad = new JProgressBar(0, 100);
@@ -59,11 +60,6 @@ public class Gameplay {
         panelInferior = new JPanel();
         panelInferior.setBackground(Color.WHITE);
 
-
-
-
-
-
         // Cargar el fondo desde el classpath
         ImageIcon Fondo = new ImageIcon(getClass().getClassLoader().getResource("mascotaBackground.jpg"));
         Image FondoEscalado = Fondo.getImage().getScaledInstance(1000, 800, Image.SCALE_SMOOTH);
@@ -81,12 +77,6 @@ public class Gameplay {
         nivelLabel.setForeground(Color.WHITE);
         fondoLabel.add(nivelLabel);
 
-
-
-
-
-
-
     }
 
     public void configurarComponentes() {
@@ -94,7 +84,7 @@ public class Gameplay {
         gameplayFrame.setSize(1000, 800);
         gameplayFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameplayFrame.setLocationRelativeTo(null);
-        // gameplayFrame.setUndecorated(true);
+       // gameplayFrame.setUndecorated(true);
 
         gameplayFrame.setContentPane(fondoLabel);
 
@@ -104,6 +94,10 @@ public class Gameplay {
         JLabel mascotaLabel = mascota.getMascotaLabel();
         mascotaLabel.setBounds(310, 360, 350, 350);
         fondoLabel.add(mascotaLabel);
+
+        //Label nivel
+        nivelLabel.setSize(200, 60);
+        nivelLabel.setLocation(gameplayFrame.getWidth() - nivelLabel.getWidth() - 10, 10);
 
 
         // Añadir barras de progreso al frame
@@ -150,15 +144,10 @@ public class Gameplay {
         panelInferior.add(btnEntrenar);
         panelInferior.add(btnDormir);
 
-        //Label nivel
-        nivelLabel.setSize(200, 60);
-        nivelLabel.setLocation(gameplayFrame.getWidth() - nivelLabel.getWidth() - 10, 10);
-
-
     }
 
-    ///METODO PARA MOSTRAR EL FRAME
-    public void mostrarFrame(){
+     ///METODO PARA MOSTRAR EL FRAME
+     public void mostrarFrame(){
         gameplayFrame.setVisible(true);
     }
 
@@ -186,38 +175,66 @@ public class Gameplay {
     }
 
     public void configurarListeners()
-    {
-        // Configurar listeners para los botones
-        btnBanar.addActionListener(e -> {
-            new Thread(new HiloBanar(mascota)).start();
-        });
+     {
+         // Configurar listeners para los botones
+         btnBanar.addActionListener(e -> {
+             new Thread(() -> {
+                 new HiloBanar(mascota).run();
+                 SwingUtilities.invokeLater(this::actualizarBarras);
+                 SwingUtilities.invokeLater(() -> gameplayFrame.requestFocusInWindow());
+             }).start();
+         });
 
-        btnComer.addActionListener(e -> {
-            new Thread(new HiloComer(mascota)).start();//HiloComer funciona como un hilo que se encarga de alimentar a la mascota
-            // actualizarBarras();
-        });
+         btnComer.addActionListener(e -> {
+             new Thread(() -> {
+                 new HiloComer(mascota).run();
+                 SwingUtilities.invokeLater(this::actualizarBarras);
+                 SwingUtilities.invokeLater(() -> gameplayFrame.requestFocusInWindow());
+             }).start();
+         });
 
-        btnEntrenar.addActionListener(e -> {
-            new Thread(new HiloEntrenar(mascota)).start();//HiloEntrenar funciona como un hilo que se encarga de entrenar a la mascota
-            //actualizarBarras();
-        });
+         btnEntrenar.addActionListener(e -> {
+             new Thread(() -> {
+                 new HiloEntrenar(mascota).run();
+                 SwingUtilities.invokeLater(this::actualizarBarras);
+                 SwingUtilities.invokeLater(() -> gameplayFrame.requestFocusInWindow());
+             }).start();
+         });
 
-        btnDormir.addActionListener(e -> {
-            new Thread(new HiloDormir(mascota)).start();//HiloDormir funciona como un hilo que se encarga de dormir a la mascota
-            //actualizarBarras();
-        });
+         btnDormir.addActionListener(e -> {
+             new Thread(() -> {
+                 new HiloDormir(mascota).run();
+                 SwingUtilities.invokeLater(this::actualizarBarras);
+                 SwingUtilities.invokeLater(() -> gameplayFrame.requestFocusInWindow());
+             }).start();
+         });
 
 
-    }
+     }
     public void iniciarTimer() {
         timer = new Timer(700, e -> {
             mascota.decrementarAtributos(1);
+            //mascota.setSuciedad(mascota.getSuciedad()+1);//Incrementa la suciedad de la mascota
             actualizarBarras();
+            //Validacion para subir de nivel
+            if (mascota.getHambre() >= 50 && mascota.getFelicidad() >= 50 && mascota.getSuciedad() > 50 && mascota.getEnergia() >= 50) {
+                mascota.setNivel(mascota.getNivel() + 1);
+                nivelLabel.setText("Nivel: " + mascota.getNivel());
+            }
         });
         timer.start();
     }
 
+     }
 
 
 
-}
+
+
+
+
+
+
+
+
+

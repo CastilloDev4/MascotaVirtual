@@ -4,6 +4,5 @@ public class Main {
 
         Inicio inicio = new Inicio();
         inicio.mostrarFrame();
-
         }
     }

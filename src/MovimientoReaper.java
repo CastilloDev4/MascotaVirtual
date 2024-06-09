@@ -4,18 +4,18 @@ import java.awt.event.KeyListener;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Movimiento implements KeyListener {
-    private Mascota mascota;
+public class MovimientoReaper implements KeyListener {
+    private MascotaReaper mascotaReaper;
     private int inicialX;
     private int inicialY;
     private ImageIcon animacionInicial;
     private boolean saltando = false;  // boolean para controlar el estado del salto
 
-    public Movimiento(Mascota mascota) {
-        this.mascota = mascota;
-        this.inicialX = mascota.getMascotaLabel().getX();  //OBTENER LA POSICION INICIAL EN X DE LA MASCOTA
-        this.inicialY = mascota.getMascotaLabel().getY(); //OBTENER LA POSICION INICIAL EN Y DE LA MASCOTA
-        this.animacionInicial = mascota.getMascotaAnimacion(); //OBTENER LA ANIMACION INICIAL DE LA MASCOTA
+    public MovimientoReaper(MascotaReaper mascotaReaper) {
+        this.mascotaReaper = mascotaReaper;
+        this.inicialX = mascotaReaper.getReaperLabel().getX();  //OBTENER LA POSICION INICIAL EN X DE LA MASCOTA
+        this.inicialY = mascotaReaper.getReaperLabel().getY(); //OBTENER LA POSICION INICIAL EN Y DE LA MASCOTA
+        this.animacionInicial = mascotaReaper.getMascotaAnimacion(); //OBTENER LA ANIMACION INICIAL DE LA MASCOTA
     }
 
     @Override
@@ -27,14 +27,14 @@ public class Movimiento implements KeyListener {
     public void keyPressed(KeyEvent e) {
         if (e.getKeyChar() == 'a' || e.getKeyChar() == 'A' || e.getExtendedKeyCode() == KeyEvent.VK_LEFT) {
 
-            mascota.getMascotaLabel().setIcon(mascota.getCorrerInvertidoAnimacion());
-            mascota.getMascotaLabel().setLocation(mascota.getMascotaLabel().getX() - 10, mascota.getMascotaLabel().getY());
+            mascotaReaper.getReaperLabel().setIcon(mascotaReaper.getCorrerInvertidoAnimacion());
+            mascotaReaper.getReaperLabel().setLocation(mascotaReaper.getReaperLabel().getX() - 10, mascotaReaper.getReaperLabel().getY());
         }
 
         if (e.getKeyChar() == 'd' || e.getKeyChar() == 'D' || e.getExtendedKeyCode() == KeyEvent.VK_RIGHT) {
 
-            mascota.getMascotaLabel().setIcon(mascota.getCorrerAnimacion());
-            mascota.getMascotaLabel().setLocation(mascota.getMascotaLabel().getX() + 10, mascota.getMascotaLabel().getY());
+            mascotaReaper.getReaperLabel().setIcon(mascotaReaper.getCorrerAnimacion());
+            mascotaReaper.getReaperLabel().setLocation(mascotaReaper.getReaperLabel().getX() + 10, mascotaReaper.getReaperLabel().getY());
 
         }
 
@@ -46,34 +46,33 @@ public class Movimiento implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         if (e.getKeyChar() == 'a' || e.getKeyChar() == 'A' || e.getExtendedKeyCode() == KeyEvent.VK_LEFT) {
-            mascota.getMascotaLabel().setIcon(animacionInicial);
+            mascotaReaper.getReaperLabel().setIcon(animacionInicial);
         }
 
         if (e.getKeyChar() == 'd' || e.getKeyChar() == 'D' || e.getExtendedKeyCode() == KeyEvent.VK_RIGHT) {
-            mascota.getMascotaLabel().setIcon(animacionInicial);
+            mascotaReaper.getReaperLabel().setIcon(animacionInicial);
         }
-
     }
 
     private void saltar() {
         saltando = true;
-        mascota.getMascotaLabel().setIcon(mascota.getSaltarAnimacion());
+        mascotaReaper.getReaperLabel().setIcon(mascotaReaper.getSaltarAnimacion());
         Timer timer = new Timer();
         TimerTask subir = new TimerTask() {
             @Override
             public void run() {
-                mascota.getMascotaLabel().setLocation(mascota.getMascotaLabel().getX(), mascota.getMascotaLabel().getY() - 10);
+                mascotaReaper.getReaperLabel().setLocation(mascotaReaper.getReaperLabel().getX(), mascotaReaper.getReaperLabel().getY() - 10);
                 TimerTask bajar = new TimerTask() {
                     @Override
                     public void run() {
-                        mascota.getMascotaLabel().setLocation(mascota.getMascotaLabel().getX(), mascota.getMascotaLabel().getY() + 10);
-                        mascota.getMascotaLabel().setIcon(animacionInicial);
+                        mascotaReaper.getReaperLabel().setLocation(mascotaReaper.getReaperLabel().getX(), mascotaReaper.getReaperLabel().getY() + 10);
+                        mascotaReaper.getReaperLabel().setIcon(animacionInicial);
                         saltando = false;
                     }
                 };
                 timer.schedule(bajar, 1000); // Espera un segundo para bajar
             }
         };
-        timer.schedule(subir, 0); // Sube  de inmediato sin delay
+        timer.schedule(subir, 0); // Sube de inmediato sin delay
     }
 }
