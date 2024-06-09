@@ -35,8 +35,6 @@ public class Inicio {
         btnJugar2 = new JButton("Fantasmin");
         btnSalir = new JButton("SALIR");
 
-
-
     }
 
     public void configurarComponentes() {
@@ -76,9 +74,9 @@ public class Inicio {
         btnJugar1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                mascota = new Mascota(100, 100, 50, 100);
+                mascota = new Mascota(100, 100, 100, 100);
                 mascota.CargarAnimaciones();
-                Gameplay gameplay = new Gameplay(mascota);
+                Gameplay gameplay = new Gameplay();
                 gameplay.mostrarFrame();
                 inicioFrame.dispose();
             }
@@ -87,7 +85,7 @@ public class Inicio {
         btnJugar2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                reaperMascota = new MascotaReaper(100, 100, 50, 100);
+                reaperMascota = new MascotaReaper(100, 100, 100, 100);
                 reaperMascota.CargarAnimaciones();
                 
                 GameplayReaper gameplayReaper = new GameplayReaper(reaperMascota);
@@ -95,19 +93,11 @@ public class Inicio {
                 inicioFrame.dispose();
             }
         });
-
-
-
-
     }
-
 
     public void mostrarFrame() {
         inicioFrame.setVisible(true);
     }
-
-
-
 
 }
 

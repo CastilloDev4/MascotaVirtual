@@ -162,6 +162,7 @@ public class GameplayReaper {
         progresoEnergia.setValue(reaperMascota.getEnergia());
 
         verificarNivel();
+        verificarMuerte();
     }
 
     private void verificarNivel() {
@@ -175,16 +176,19 @@ public class GameplayReaper {
             reaperMascota.reiniciarNivelSubido();
         }
     }
+    public void verificarMuerte() {
+        if (reaperMascota.getHambre() <= 0 && reaperMascota.getFelicidad() <= 0 && reaperMascota.getSuciedad() <= 0 && reaperMascota.getEnergia() <= 0) {
+            JOptionPane.showMessageDialog(ReaperFrame, "Perdiste! tu mascota ha muerto </3", "Game Over", JOptionPane.ERROR_MESSAGE);
+            System.exit(0);
+        }
+    }
 
-
+//DELAY MANEJA LA VELOCIDAD EN LA QUE DECREMENTAN LAS BARRAS
     public void iniciarTimer() {
-        timer = new Timer(700, e -> {
+        timer = new Timer(500, e -> {
             reaperMascota.decrementarAtributos(1);
             actualizarProgreso();
-            if (reaperMascota.getHambre() >= 50 && reaperMascota.getFelicidad() >= 50 && reaperMascota.getSuciedad() > 50 && reaperMascota.getEnergia() >= 50) {
-                reaperMascota.setNivel(reaperMascota.getNivel() + 1);
-                nivelLabel.setText("Nivel: " + reaperMascota.getNivel());
-            }
+
         });
         timer.start();
     }
