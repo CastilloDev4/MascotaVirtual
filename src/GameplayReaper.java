@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.Serializable;
 
-public class GameplayReaper implements Serializable {
+public class GameplayReaper /*implements Serializable*/ {
 
     JFrame ReaperFrame;
     MascotaReaper reaperMascota;

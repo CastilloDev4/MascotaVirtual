@@ -3,7 +3,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.io.Serializable;
 
-public class Gameplay implements Serializable {
+public class Gameplay /*implements Serializable*/ {
     //private AutoGuardado autoGuardado;
     private Sound sound;
     private JFrame gameplayFrame;
