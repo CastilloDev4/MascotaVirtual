@@ -5,29 +5,31 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AutoGuardado { //👻👻👻👻👻👻
-    private Mascota mascota = new Mascota(0,0,0,0);
+/*public class AutoGuardado { //👻👻👻👻👻👻
+    private Mascota mascota;
     private ArrayList<Integer> barrasEstado;
     private int hambre, felicidad, energia, suciedad, lvl;
+
     public AutoGuardado() {
         barrasEstado = new ArrayList<>();
         guardarLista(barrasEstado);
     }
-    public void guardarDatos(int hambre, int felicidad, int energia, int suciedad, int lvl) {
-        cargarLista();
 
+    public void guardarDatos(int hambre, int felicidad, int energia, int suciedad, int lvl) {
+        //this.mascota = new Mascota(hambre, felicidad, energia, suciedad);
+        cargarLista();
         barrasEstado.add(hambre);
         barrasEstado.add(felicidad);
         barrasEstado.add(suciedad);
         barrasEstado.add(energia);
         barrasEstado.add(lvl);
-
-
         guardarLista(barrasEstado);
     }
+
     public void imprimirLista(){
         System.out.println(barrasEstado);
     }
+
     public void guardarEstado(){
         cargarLista();
         if (barrasEstado.size() == 5) {
@@ -59,6 +61,7 @@ public class AutoGuardado { //👻👻👻👻👻👻
             e.printStackTrace();
         }
     }
+
     public ArrayList<Integer> cargarLista() {
         ArrayList<Integer> barrasEstado = null;
         try {
@@ -72,4 +75,4 @@ public class AutoGuardado { //👻👻👻👻👻👻
         }
         return barrasEstado;
     }
-}
+}*/

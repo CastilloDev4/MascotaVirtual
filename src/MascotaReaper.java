@@ -1,6 +1,7 @@
 import javax.swing.*;
+import java.io.Serializable;
 
-public class MascotaReaper {
+public class MascotaReaper implements Serializable {
 
     private ImageIcon mascotaAnimacion;
     private ImageIcon hambreAnimacion;

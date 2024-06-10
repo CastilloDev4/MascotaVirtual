@@ -1,7 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
+import java.io.Serializable;
 
-public class GameplayReaper {
+public class GameplayReaper implements Serializable {
 
     JFrame ReaperFrame;
     MascotaReaper reaperMascota;
@@ -14,6 +15,7 @@ public class GameplayReaper {
     private Timer timer;
     private JLabel nivelLabel;
     private JPanel panelInferior;
+    private Guardado guardado = new Guardado();
 
     public GameplayReaper(MascotaReaper reaperMascota){
         this.reaperMascota = reaperMascota;
@@ -24,10 +26,21 @@ public class GameplayReaper {
         mostrarFrame();
 
     }
+    public void guardarDatos() {
+        guardado.guardarDatosReaper(reaperMascota);
+    }
 
     public void inicializarComponentes(){
         ReaperFrame = new JFrame("Reaper Pet");
-        reaperMascota = new MascotaReaper(50, 50, 50, 50);
+        //Guadado de datos
+        this.reaperMascota = guardado.cargarDatosReaper();
+        if (this.reaperMascota == null) {
+            this.reaperMascota = new MascotaReaper(50, 50, 50, 50);
+        }
+
+        Timer timerReaper = new Timer(2000, e -> guardarDatos());
+        timerReaper.start();
+
         progresoHambre = new JProgressBar(0, 100);
         progresoFelicidad = new JProgressBar(0, 100);
         progresoSuciedad = new JProgressBar(0, 100);
@@ -179,6 +192,17 @@ public class GameplayReaper {
     public void verificarMuerte() {
         if (reaperMascota.getHambre() <= 0 && reaperMascota.getFelicidad() <= 0 && reaperMascota.getSuciedad() <= 0 && reaperMascota.getEnergia() <= 0) {
             JOptionPane.showMessageDialog(ReaperFrame, "Perdiste! tu mascota ha muerto </3", "Game Over", JOptionPane.ERROR_MESSAGE);
+
+            // Resetear las barras de progreso y el nivel de la mascota
+            reaperMascota.setHambre(50);
+            reaperMascota.setFelicidad(50);
+            reaperMascota.setSuciedad(50);
+            reaperMascota.setEnergia(50);
+            reaperMascota.setNivel(1);
+
+            // Guardar los datos reseteados
+            guardarDatos();
+
             System.exit(0);
         }
     }

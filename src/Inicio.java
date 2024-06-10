@@ -10,6 +10,7 @@ public class Inicio {
     private JButton btnJugar1,btnJugar2, btnSalir;
     private Mascota mascota;
     private MascotaReaper reaperMascota;
+   // private Gameplay gameplay;
 
 
     public Inicio() {
@@ -24,6 +25,7 @@ public class Inicio {
     public void inicializarComponentes() {
 
         inicioFrame = new JFrame("Bienvenido");
+        //gameplay = new Gameplay();
         // GET CLASS,GETCLASSLOADER Y GET RESOURCE ES PARA OBTENER LA RUTA DE LA IMAGEN
         //LA CARPETA RESOURCES ES LA CARPETA DONDE SE VAN AÑADIR TODAS LAS IMAGENES Y LA RUTA VA A SER SIEMPRE LA MISMA
         // SOLO CAMBIARA EL NOMBRE DEPENDE LA IMAGEN O GIF
@@ -74,7 +76,7 @@ public class Inicio {
         btnJugar1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                mascota = new Mascota(100, 100, 100, 100);
+                mascota = new Mascota(50, 50, 50, 50);
                 mascota.CargarAnimaciones();
                 Gameplay gameplay = new Gameplay();
                 gameplay.mostrarFrame();
@@ -87,9 +89,7 @@ public class Inicio {
             public void actionPerformed(ActionEvent e) {
                 reaperMascota = new MascotaReaper(100, 100, 100, 100);
                 reaperMascota.CargarAnimaciones();
-                
                 GameplayReaper gameplayReaper = new GameplayReaper(reaperMascota);
-
                 inicioFrame.dispose();
             }
         });

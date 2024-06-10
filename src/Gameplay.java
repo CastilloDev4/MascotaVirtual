@@ -1,12 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyListener;
+import java.util.ArrayList;
 import java.io.Serializable;
 
 public class Gameplay implements Serializable {
-    private AutoGuardado autoGuardado;
+    //private AutoGuardado autoGuardado;
     private Sound sound;
     private JFrame gameplayFrame;
     private JProgressBar progresoHambre;
@@ -18,31 +16,39 @@ public class Gameplay implements Serializable {
     private JButton btnComer, btnBanar, btnEntrenar, btnDormir;
     private JPanel panelInferior;
     private Timer timer;
-    private Timer timer1, timer2, timer3;
+    //private Timer timer1, timer2, timer3;
     private JLabel nivelLabel;
+    private Guardado guardado;
 
 
-//<<<<<<< Updated upstream
-//=======
+
     public Gameplay() {
         //this.fondoLabel = new JLabel();
-
+        guardado = new Guardado();
         inicializarComponentes();
         configurarComponentes();
         configurarListeners();
-        cargarEstados(); //👻👻👻👻👻
         mostrarFrame();
         iniciarTimer();
         configurarSonido("src/Sounds/Clear-Skies.wav"); //👻👻👻👻👻
-        iniciarTimerAutoguardado(); //👻👻👻👻👻
+        //iniciarTimerAutoguardado(); //👻👻👻👻👻
 
+    }
+
+    public void guardarDatos() {
+        guardado.guardarDatos(mascota);
     }
 
 
     public void inicializarComponentes(){
         gameplayFrame = new JFrame("Virtual Pet");
         //Inicializacion de la mascota con sus valores en 100
-        mascota = new Mascota(50, 50, 50, 50);
+        mascota = guardado.cargarDatos();
+        if (mascota == null) {
+            mascota = new Mascota(50, 50, 50, 50);
+        }
+        Timer timerMasc = new Timer(2000, e -> guardarDatos());
+        timerMasc.start();
         //Inicializar barras de progreso
         progresoHambre = new JProgressBar(0, 100);
         progresoFelicidad = new JProgressBar(0, 100);
@@ -187,6 +193,17 @@ public class Gameplay implements Serializable {
     public void verificarMuerte() {
         if (mascota.getHambre() <= 0 && mascota.getFelicidad() <= 0 && mascota.getSuciedad() <= 0 && mascota.getEnergia() <= 0) {
             JOptionPane.showMessageDialog(gameplayFrame, "Perdiste! tu mascota ha muerto </3","Game Over", JOptionPane.ERROR_MESSAGE);
+
+            mascota.setHambre(50);
+            mascota.setFelicidad(50);
+            mascota.setSuciedad(50);
+            mascota.setEnergia(50);
+            mascota.setNivel(1);
+
+            // Guardar los datos reseteados
+            guardarDatos();
+
+
             System.exit(0);
         }
     }
@@ -234,29 +251,7 @@ public class Gameplay implements Serializable {
 
         });
 
-//
-//        // Configurar listeners para los botones
-//        btnBanar.addActionListener(e -> {
-//            new Thread(new HiloBanar(mascota)).start();
-//
-//        });
-//
-//        btnComer.addActionListener(e -> {
-//            new Thread(new HiloComer(mascota)).start();//HiloComer funciona como un hilo que se encarga de alimentar a la mascota
-//            // actualizarBarras();
-//
-//        });
-//
-//        btnEntrenar.addActionListener(e -> {
-//            new Thread(new HiloEntrenar(mascota)).start();//HiloEntrenar funciona como un hilo que se encarga de entrenar a la mascota
-//            //actualizarBarras();
-//        });
-//
-//        btnDormir.addActionListener(e -> {
-//            new Thread(new HiloDormir(mascota)).start();//HiloDormir funciona como un hilo que se encarga de dormir a la mascota
-//            //actualizarBarras();
-//
-//        });
+
     }
     //TIMER QUE SE ENCARGA DE DECREMENTAR LAS BARRAS DE PROGRESO
     public void iniciarTimer() {
@@ -279,7 +274,7 @@ public class Gameplay implements Serializable {
         sound.cargarSonido(ruta);
         sound.reproducir();
     }
-    private void iniciarTimerAutoguardado() { //👻👻👻👻👻
+    /*private void iniciarTimerAutoguardado() { //👻👻👻👻👻
         autoGuardado = new AutoGuardado();
         timer1 = new Timer(10000, e -> autoGuardado.guardarDatos(mascota.getHambre(), mascota.getFelicidad(), mascota.getEnergia(), mascota.getSuciedad(), mascota.getNivel()));
         new AutoGuardado();
@@ -290,11 +285,17 @@ public class Gameplay implements Serializable {
         timer3.start();
    }
 
-   public void cargarEstados(){ //👻👻👻👻👻
+    public void cargarEstados() {
         autoGuardado = new AutoGuardado();
-        autoGuardado.cargarLista();
-        autoGuardado.actualizarDatos();
-   }
+        ArrayList<Integer> estados = autoGuardado.cargarLista();
+        if (estados != null && estados.size() == 5) {
+            mascota.setHambre(estados.get(0));
+            mascota.setFelicidad(estados.get(1));
+            mascota.setSuciedad(estados.get(2));
+            mascota.setEnergia(estados.get(3));
+            mascota.setNivel(estados.get(4));
+        }
+    }*/
 }
 
 
