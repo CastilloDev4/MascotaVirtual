@@ -1,5 +1,8 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.io.Serializable;
 
@@ -47,7 +50,7 @@ public class Gameplay /*implements Serializable*/ {
         if (mascota == null) {
             mascota = new Mascota(50, 50, 50, 50);
         }
-        Timer timerMasc = new Timer(2000, e -> guardarDatos());
+        Timer timerMasc = new Timer(10000, e -> guardarDatos());
         timerMasc.start();
         //Inicializar barras de progreso
         progresoHambre = new JProgressBar(0, 100);
@@ -192,8 +195,9 @@ public class Gameplay /*implements Serializable*/ {
 
     public void verificarMuerte() {
         if (mascota.getHambre() <= 0 && mascota.getFelicidad() <= 0 && mascota.getSuciedad() <= 0 && mascota.getEnergia() <= 0) {
-            JOptionPane.showMessageDialog(gameplayFrame, "Perdiste! tu mascota ha muerto </3","Game Over", JOptionPane.ERROR_MESSAGE);
-
+            //JOptionPane.showMessageDialog(gameplayFrame, "Perdiste! tu mascota ha muerto </3","Game Over", JOptionPane.ERROR_MESSAGE);
+            configurarSonidoAcciones("src/Sounds/Game Over.wav");
+            mostrarVentanaPerdida();
             mascota.setHambre(50);
             mascota.setFelicidad(50);
             mascota.setSuciedad(50);
@@ -274,28 +278,46 @@ public class Gameplay /*implements Serializable*/ {
         sound.cargarSonido(ruta);
         sound.reproducir();
     }
-    /*private void iniciarTimerAutoguardado() { //👻👻👻👻👻
-        autoGuardado = new AutoGuardado();
-        timer1 = new Timer(10000, e -> autoGuardado.guardarDatos(mascota.getHambre(), mascota.getFelicidad(), mascota.getEnergia(), mascota.getSuciedad(), mascota.getNivel()));
-        new AutoGuardado();
-        timer1.start();
-        timer2 = new Timer(10000, e -> autoGuardado.imprimirLista());
-        timer2.start();
-        timer3 = new Timer(10000, e -> autoGuardado.guardarEstado());
-        timer3.start();
-   }
 
-    public void cargarEstados() {
-        autoGuardado = new AutoGuardado();
-        ArrayList<Integer> estados = autoGuardado.cargarLista();
-        if (estados != null && estados.size() == 5) {
-            mascota.setHambre(estados.get(0));
-            mascota.setFelicidad(estados.get(1));
-            mascota.setSuciedad(estados.get(2));
-            mascota.setEnergia(estados.get(3));
-            mascota.setNivel(estados.get(4));
-        }
-    }*/
+    public static void mostrarVentanaPerdida() {
+        JPanel panel = new JPanel() {
+            private Image backgroundImage;
+            {
+                try {
+                    backgroundImage = ImageIO.read(new File("src/Imagenes/imagen.jpg")); // Ruta de la imagen
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                if (backgroundImage != null) {
+                    g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+                }
+            }
+        };
+
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        JLabel labelMensaje = new JLabel("Perdiste! tu mascota ha muerto </3");
+        labelMensaje.setForeground(Color.WHITE);
+        labelMensaje.setAlignmentX(Component.CENTER_ALIGNMENT);
+        labelMensaje.setFont(new Font("Arial", Font.BOLD, 16));
+
+
+        // Añadir espacio entre el fondo y el texto
+        panel.add(Box.createVerticalGlue());
+        panel.add(labelMensaje);
+        panel.add(Box.createVerticalGlue());
+
+        // Configurar el JOptionPane
+        JOptionPane optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION);
+        JDialog dialog = optionPane.createDialog("Fin del Juego");
+        dialog.setSize(400, 300);
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+    }
 }
 
 

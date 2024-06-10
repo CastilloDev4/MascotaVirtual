@@ -1,5 +1,8 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 
 public class GameplayReaper /*implements Serializable*/ {
@@ -16,6 +19,7 @@ public class GameplayReaper /*implements Serializable*/ {
     private JLabel nivelLabel;
     private JPanel panelInferior;
     private Guardado guardado = new Guardado();
+    private Sound sound;
 
     public GameplayReaper(MascotaReaper reaperMascota){
         this.reaperMascota = reaperMascota;
@@ -24,6 +28,7 @@ public class GameplayReaper /*implements Serializable*/ {
         configurarListeners();
         iniciarTimer();
         mostrarFrame();
+        configurarSonido("src/Sounds/fantasma.wav");
 
     }
     public void guardarDatos() {
@@ -38,7 +43,7 @@ public class GameplayReaper /*implements Serializable*/ {
             this.reaperMascota = new MascotaReaper(50, 50, 50, 50);
         }
 
-        Timer timerReaper = new Timer(2000, e -> guardarDatos());
+        Timer timerReaper = new Timer(10000, e -> guardarDatos());
         timerReaper.start();
 
         progresoHambre = new JProgressBar(0, 100);
@@ -134,37 +139,46 @@ public class GameplayReaper /*implements Serializable*/ {
 
 
     public void configurarListeners(){
-            btnBanar.addActionListener(e -> {
-                new Thread(() -> {
-                    new HiloAnimacion(reaperMascota,"banar").run();
-                    SwingUtilities.invokeLater(this::actualizarProgreso);
-                    SwingUtilities.invokeLater(() -> ReaperFrame.requestFocusInWindow());
-                }).start();
-            });
+        btnBanar.addActionListener(e -> {
+            new Thread(() -> {
+                new HiloAnimacion(reaperMascota,"banar").run();
+                SwingUtilities.invokeLater(this::actualizarProgreso);
+                SwingUtilities.invokeLater(() -> ReaperFrame.requestFocusInWindow());
+            }).start();
+            configurarSonidoAcciones("src/Sounds/bañar-f.wav");
 
-            btnComer.addActionListener(e -> {
-                new Thread(() -> {
-                    new HiloAnimacion(reaperMascota,"comer").run();
-                    SwingUtilities.invokeLater(this::actualizarProgreso);
-                    SwingUtilities.invokeLater(() -> ReaperFrame.requestFocusInWindow());
-                }).start();
-            });
+        });
 
-            btnEntrenar.addActionListener(e -> {
-                new Thread(() -> {
-                    new HiloAnimacion(reaperMascota,"entrenar").run();
-                    SwingUtilities.invokeLater(this::actualizarProgreso);
-                    SwingUtilities.invokeLater(() -> ReaperFrame.requestFocusInWindow());
-                }).start();
-            });
+        btnComer.addActionListener(e -> {
+            new Thread(() -> {
+                new HiloAnimacion(reaperMascota,"comer").run();
+                SwingUtilities.invokeLater(this::actualizarProgreso);
+                SwingUtilities.invokeLater(() -> ReaperFrame.requestFocusInWindow());
+            }).start();
+            configurarSonidoAcciones("src/Sounds/comer.wav");
 
-            btnDormir.addActionListener(e -> {
-                new Thread(() -> {
-                    new HiloAnimacion(reaperMascota,"dormir").run();
-                    SwingUtilities.invokeLater(this::actualizarProgreso);
-                    SwingUtilities.invokeLater(() -> ReaperFrame.requestFocusInWindow());
-                }).start();
-            });
+        });
+
+        btnEntrenar.addActionListener(e -> {
+            new Thread(() -> {
+                new HiloAnimacion(reaperMascota,"entrenar").run();
+                SwingUtilities.invokeLater(this::actualizarProgreso);
+                SwingUtilities.invokeLater(() -> ReaperFrame.requestFocusInWindow());
+            }).start();
+            configurarSonidoAcciones("src/Sounds/entrenar-f.wav");
+
+        });
+
+        btnDormir.addActionListener(e -> {
+            new Thread(() -> {
+                new HiloAnimacion(reaperMascota,"dormir").run();
+                SwingUtilities.invokeLater(this::actualizarProgreso);
+                SwingUtilities.invokeLater(() -> ReaperFrame.requestFocusInWindow());
+            }).start();
+            configurarSonidoAcciones("src/Sounds/dormir.wav");
+
+        });
+
         };
 
 
@@ -191,7 +205,9 @@ public class GameplayReaper /*implements Serializable*/ {
     }
     public void verificarMuerte() {
         if (reaperMascota.getHambre() <= 0 && reaperMascota.getFelicidad() <= 0 && reaperMascota.getSuciedad() <= 0 && reaperMascota.getEnergia() <= 0) {
-            JOptionPane.showMessageDialog(ReaperFrame, "Perdiste! tu mascota ha muerto </3", "Game Over", JOptionPane.ERROR_MESSAGE);
+            //JOptionPane.showMessageDialog(ReaperFrame, "Perdiste! tu mascota ha muerto </3", "Game Over", JOptionPane.ERROR_MESSAGE);
+            configurarSonidoAcciones("src/Sounds/Game Over.wav");
+            mostrarVentanaPerdida();
 
             // Resetear las barras de progreso y el nivel de la mascota
             reaperMascota.setHambre(50);
@@ -207,6 +223,46 @@ public class GameplayReaper /*implements Serializable*/ {
         }
     }
 
+    public static void mostrarVentanaPerdida() {
+        JPanel panel = new JPanel() {
+            private Image backgroundImage;
+            {
+                try {
+                    backgroundImage = ImageIO.read(new File("src/Imagenes/imagen.jpg")); // Ruta de la imagen
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                if (backgroundImage != null) {
+                    g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+                }
+            }
+        };
+
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        JLabel labelMensaje = new JLabel("Perdiste! tu mascota ha muerto </3");
+        labelMensaje.setForeground(Color.WHITE);
+        labelMensaje.setAlignmentX(Component.CENTER_ALIGNMENT);
+        labelMensaje.setFont(new Font("Arial", Font.BOLD, 16));
+
+
+        // Añadir espacio entre el fondo y el texto
+        panel.add(Box.createVerticalGlue());
+        panel.add(labelMensaje);
+        panel.add(Box.createVerticalGlue());
+
+        // Configurar el JOptionPane
+        JOptionPane optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION);
+        JDialog dialog = optionPane.createDialog("Fin del Juego");
+        dialog.setSize(400, 300);
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+    }
+
 //DELAY MANEJA LA VELOCIDAD EN LA QUE DECREMENTAN LAS BARRAS
     public void iniciarTimer() {
         timer = new Timer(500, e -> {
@@ -215,6 +271,18 @@ public class GameplayReaper /*implements Serializable*/ {
 
         });
         timer.start();
+    }
+
+    public void configurarSonido(String ruta) {
+        sound = new Sound();
+        sound.cargarSonido(ruta);
+        sound.iniciarReproduccionEnHilo();
+    }
+    public void configurarSonidoAcciones(String ruta){
+        sound = new Sound();
+        sound.detener();
+        sound.cargarSonido(ruta);
+        sound.reproducir();
     }
 
     public void mostrarFrame(){ReaperFrame.setVisible(true);}
